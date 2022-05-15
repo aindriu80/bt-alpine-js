@@ -8,31 +8,92 @@
      <link rel="icon" type="image/svg+xml" href="./favicon.ico"> 
     <title>Alpine JS Demo</title>
   </head>
-  <body>
+  <div>
     <div class="container mx-auto mt-6 max-w-sm">
       <h1 class="text-3xl mb-4">Alphine.js Crash Course</h1>
 
       <!-- This is for x-data which is an alpine component -->
-    <div x-data="{open:  false, name:'Aindriú'}">
-      <button x-on:click="open = !open" class="bg-slate-700 text-white px-4 py-2 rounded-xl">
+    <div 
+      x-data="{
+      open:  false, 
+      name: 'Aindriú',
+      search: '',
+      posts:[
+      {title: 'Post One'},
+      {title: 'Post Two'},
+      {title: 'Post Three'},
+      {title: 'Post Four'},
+      ]
+      }"
+      >
+
+      <!-- x-on  and x-bind -->
+      <button 
+      x-on:click="open = !open" 
+      :class="open ? 'bg-blue-800' : 'bg-slate-700'"  
+      class="bg-slate-700 text-white px-4 py-2 rounded-xl">
         Toggle
       </button>
 
       <!-- This is x-show  -->
-      <div x-show="open" x-transition x-cloak>
+      <div 
+      x-show="open" x-transition x-cloak>
         <p class="bg-gray-200 p-4 my-6 rounded">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed illo esse quasi aut doloremque fuga, 
           culpa laborum temporibus et soluta delectus repellat sapiente commodi, perferendis animi saepe. 
           Repellat, ipsam saepe.
         </p>
       </div>
+
       <!-- This is for x-text  -->
       <div class="my-4">
         the value of name is <span x-text="name" class="font-bold"></span>
       </div>
-    </div>
+
+      <!-- x-effect  -->
+      <div 
+      x-effect="console.log(open)"></div>
+   
+    <!-- x-model  -->
+    <input
+      x-model="search"
+      type="text" 
+      class="border p-2 w-full mb-2 mt-6"
+      placeholder="Search for something..."
+    />
+    <p>
+      <span class="font-bold">Searching for:</span>
+      <span x-text="search"></span>
+    </p>
+
+    <!-- x-if -->
+    <template x-if="open">
+      <div className="bg-gray-50 p-2 mt-8">
+        Template based on a condition
+      </div>
+    </template>
+
+
+      <!-- x-for -->
+      <h3 class="text-2xl mt-6 mb-3 font-bold">Post</h3>
+      <template x-for="post in posts">
+        <div x-text="post.title"></div>
+      </template>
+      <button 
+        @click="posts.push({title: 'New Post'})"
+        class="bg-blue-800 text-white px-4 py-2 
+        rounded-lg mt-4">
+        Add Post
+      </button>
+
+      <div class="my-6">
+        <!-- x-ref -->
+        <div x-ref="text"></div>
+        <button @click="$refs.text.innerText = 'Hello World'" class="bg-black text-white p-2 rounded-lg">Click</button>
+      </div>
 
     </div>
+  </div>
 
     <script src="./resources/index.js"></script>
     <script src="./resources/tailwind-3-0-24.js"></script>
