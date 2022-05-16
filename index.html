@@ -7,6 +7,7 @@
     <link href="resources/styles.css" rel="stylesheet">
      <link rel="icon" type="image/svg+xml" href="./favicon.ico"> 
     <title>Alpine JS Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   </head>
   <div>
     <div class="container mx-auto mt-6 max-w-sm">
@@ -88,13 +89,53 @@
 
       <div class="my-6">
         <!-- x-ref -->
-        <div x-ref="text"></div>
-        <button @click="$refs.text.innerText = 'Hello World'" class="bg-black text-white p-2 rounded-lg">Click</button>
+        <div x-ref="text">Hello World</div>
+        <button 
+        @click="$refs.text.remove()" 
+        class="bg-black text-white p-2 rounded-lg">Click</button>
       </div>
 
+      <!-- x-html -->
+      <div x-html="(await axios.get('./partial.html')).data">
+        ...
+      </div>
+
+      <!-- $el -->
+      <button 
+      x-on:click="$el.innerHTML = 'Hello World!'" 
+      class="mt-4 p-4 border">Replace Text</button>
+
+      <!-- x-init  with watch -->
+      <div x-init="$watch('posts', value=> console.log(value))"></div>
+
+      <!-- $dispatch dispatching browser events -->
+      <div @notify="alert('You have been notified!')" >
+        <button 
+        @click="$dispatch('notify')" 
+        class="bg-green-700 text-white p-2 mt-4 rounded-lg">
+          Notify
+        </button>
+
+        <!-- $data -->
+        <button 
+        @click="getLatestPosts($data.posts)" 
+        class="bg-orange-800 text-white mt-6 p-2 rounded-lg">
+          Get Latest Post
+        </button>
+
+      </div>
     </div>
   </div>
 
+  <footer x-data class="text-center mt-10">
+    <p>Copyright &copy; <span x-text="new Date().getFullYear()"></span></p>
+  </footer>
+
+  <script>
+    function getLatestPosts(posts){
+      console.log(posts.slice(-1).pop())
+    }
+  </script>
     <script src="./resources/index.js"></script>
     <script src="./resources/tailwind-3-0-24.js"></script>
   </body>
